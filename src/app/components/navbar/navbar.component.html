@@ -1,0 +1,16 @@
+<div class="fixed-top" *ngIf="usuario.rol == 'NON'">
+  <p> No estás logueado !!!</p>
+</div>
+<div class="fixed-top" *ngIf="usuario.rol !== 'NON'">
+  <nav class="navbar fixed-top navbar-light" style="background-color: lightsteelblue;">
+    <form class="form-inline">
+      <a class="navbar-brand" href="#"><i class="glyphicon glyphicon-user"></i>Tu Menú:</a>
+      <button routerLink="/registerMozo" class="btn btn-sm btn-outline-primary" type="button">Tabla de
+        Incidencias</button> &nbsp;
+      <button routerLink="/incidencia" class="btn btn-sm btn-outline-primary" type="button">Generar
+        Incidencia</button> &nbsp;
+      <button routerLink="/cuentas" class="btn btn-sm btn-outline-primary" type="button">Administrar Cuentas</button> &nbsp;
+      <button (click)="salir()" class="btn btn-sm btn-outline-primary float-right" type="button">Salir</button>
+    </form>
+  </nav>
+</div>

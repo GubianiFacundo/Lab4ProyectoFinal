@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <br>
+  <div class="center">
+    <h2>Mozo</h2>
+    <div class="d-inline-flex form-group" style="width: 650px;">
+      <label>Nombre:</label> &nbsp;
+      <input type="text" class="form-control" style="width: 100%;" maxlength="60" required
+        [(ngModel)]="mozo.nombre">
+      <label>Nro Mozo:</label> &nbsp;
+      <input type="number" class="form-control" style="width: 100%;" required
+        [(ngModel)]="mozo.nro_mozo">
+    </div>
+  </div>
+  <div class="d-inline-flex justify-content-around" style="width: 500px;">
+    <button class="btn btn-success float-left" (click)="generarMozo()">Registrar Mozo</button>
+  </div>
+</div>

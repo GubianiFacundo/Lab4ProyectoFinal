@@ -1,0 +1,35 @@
+<div>
+  <div class="jumbotron">
+    <h1>Tu Menú !!!</h1>
+  </div>
+  <form [hidden]="enviado" class="marginUp" #userForm="ngForm">
+    <div class="form-group col-md-4 center ">
+      <label>Usuario:</label>
+      <input type="text" class="form-control" id="user" name="user" required [(ngModel)]="usuario.nombre"
+        placeholder="Ingrese su usuario" #user="ngModel">
+      <div [hidden]="user.valid || user.pristine" class="alert alert-danger">
+        El usuario es obligatorio
+      </div>
+    </div>
+    <div class="form-group col-md-4 center">
+      <label>Contraseña:</label>
+      <input type="password" class="form-control" id="password" name="password" required [(ngModel)]="usuario.clave"
+        placeholder="Ingrese su clave" #clave="ngModel">
+      <div [hidden]="clave.valid || clave.pristine" class="alert alert-danger">
+        La contraseña es obligatoria
+      </div>
+    </div>
+    <div class="form-group col-md-4 center ">
+      <!-- hay que hacer check de la fecha de la cuenta  -->
+      <label>Fecha Fin:</label>
+      <input type="date" class="form-control" id="fecha" name="fecha" required [(ngModel)]="usuario.fechaFin"
+        placeholder="Ingrese su usuario" #fechaFin="ngModel">
+      <br>
+      <button type="submit" (click)="registrar()" class="btn btn-primary"
+        [disabled]="!userForm.form.valid">Registrar</button>
+    </div>
+  </form>
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    Usuario o clave incorrectos. Por favor, verifique y reintente
+  </div>
+</div>
