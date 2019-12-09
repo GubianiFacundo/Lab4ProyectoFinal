@@ -4,6 +4,6 @@ export class Mozo {
 
   constructor() {
       this.nombre = '';
-      this.nro_mozo = 0;
+      this.nro_mozo = 1;
   }
 }

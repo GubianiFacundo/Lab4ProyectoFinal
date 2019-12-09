@@ -13,23 +13,26 @@
     </div>
     <div class="form-group col-md-4 center">
       <label>Contraseña:</label>
-      <input type="password" class="form-control" id="password" name="password" required [(ngModel)]="usuario.clave"
-        placeholder="Ingrese su clave" #clave="ngModel">
+      <input type="password" class="form-control" id="password" name="password" required [(ngModel)]="usuario.pass"
+        placeholder="Ingrese su contraseña" #clave="ngModel">
       <div [hidden]="clave.valid || clave.pristine" class="alert alert-danger">
         La contraseña es obligatoria
       </div>
     </div>
     <div class="form-group col-md-4 center ">
-      <!-- hay que hacer check de la fecha de la cuenta  -->
-      <label>Fecha Fin:</label>
-      <input type="date" class="form-control" id="fecha" name="fecha" required [(ngModel)]="usuario.fechaFin"
-        placeholder="Ingrese su usuario" #fechaFin="ngModel">
-      <br>
-      <button type="submit" (click)="registrar()" class="btn btn-primary"
+      <button type="submit" (click)="registrar()" class="btn btn-success"
         [disabled]="!userForm.form.valid">Registrar</button>
+        <button routerLink="/login" type="button" class="btn btn-primary float-right">Volver al Login</button>
     </div>
   </form>
   <div *ngIf="error" class="alert alert-danger" role="alert">
     Usuario o clave incorrectos. Por favor, verifique y reintente
+  </div>
+
+  <div [hidden]="ok == false" class="alert alert-success">
+    {{ response.msg }}
+  </div>
+  <div [hidden]="notOk == false" class="alert alert-danger">
+    {{ response.msg }}
   </div>
 </div>

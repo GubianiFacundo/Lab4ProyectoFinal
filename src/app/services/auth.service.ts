@@ -25,20 +25,16 @@ export class AuthService {
   isLogged() { return this.user.rol !== 'NON'; }
 
   nuevoLogueado(u: Usuario) {
-    // recibo el usuario del login
     this.user = u;
-    // y lo avisamos a los componentes suscriptos atraves del BehaviorSubject
     this.logueado.next(this.user);
 
   }
 
-  // Observable devuelve usuario válido (no olvidar hacer la suscripcion desde la login page)
   login(nombre: String, pass: String) {
     const body = { nombre: nombre, pass: pass };
     return this.client.post('http://localhost:8000/api/login', body, httpOptions);
   }
 
- // re facil creamos un nuevo usuario (rol NON) y lo mandamos a nuevologueado
  logout() { this.nuevoLogueado(new Usuario()); }
 
 }

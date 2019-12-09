@@ -16,12 +16,7 @@ export class LoggedGuard implements CanActivate {
 
     if (this.authSrv.isLogged) { return true; }
 
-    // resguardamos la direccion pedida
     this.authSrv.redirectUrl = state.url;
-    // console.log(state.url);
-    // vamos al login
-    // this.router.navigate(['/']);
     return false;
-
   }
 }

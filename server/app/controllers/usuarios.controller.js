@@ -27,14 +27,20 @@ exports.login = (req, res) => {
 };
 
 exports.registrar = (req, res) => {
-  if (req.body && req.body.usuario && req.body.pass && req.body.rol) {
+  if (req.body && req.body.nombre && req.body.pass) {
     db.usuarios.create({
-      nombre: req.body.usuario,
+      nombre: req.body.nombre,
       pass: req.body.pass,
-    }).then(() => {
-      res.status(201).send('Usuario generado correctamente !!!');
+      rol_id: 'USR'
+    }).then((usuario) => {
+      res.status(201).json({
+        msg: `Usuario ${usuario.nombre} generado correctamente !!!`
+      });
     }).catch(err => {
-      res.status(409).send(err);
+      res.status(409).json({
+        msg: `Error al generar !!!`,
+        err: err
+      });
     });
   } else {
     res.status(401).send('Faltan variables !!!');
@@ -43,42 +49,51 @@ exports.registrar = (req, res) => {
 
 
 exports.listaUsuario = (req, res) => {
-  let whereClause;
-  if (req.query.tipo == 'activas') {
-    whereClause = {
-      fecha_fin: {
-        [op.or]: {
-          [op.gt]: formDate.format(new Date),
-          [op.is]: null,
-        }
-      }
-    }
-  } else if (req.query.tipo == 'inactivas') {
-    whereClause =  {
-      fecha_fin: {
-        [op.or]: {
-          [op.lt]: formDate.format(new Date),
-        }
-      }
-    }
-  } else if (req.query.tipo == 'todas') {
-    whereClause =  {
-      fecha_ini: {
-        [op.or]: {
-          [op.ne]: null
-        }
-      }
-    }
-  }
-
   db.usuarios.findAll({
-    attributes: ['id', 'nombre', 'fecha_ini', 'fecha_fin', 'rol_id'],
-    where: whereClause
+    attributes: ['id', 'nombre', 'rol_id'],
   }).then(result => {
     res.status(200).json(result);
   }).catch(err => {
     res.status(401).send(err)
   });
+};
+
+exports.borrar = (req, res) => {
+  if (req.params.id) {
+    db.usuarios.destroy({
+      where: {
+        id: req.params.id,
+      },
+    }).then(() => {
+      res.status(202).json({
+        ok: true,
+        msg: `Se eliminó el usuario ${req.params.id} correctamente`,
+      });
+    }).catch(err => {
+      res.status(409).send(err);
+    });
+  } else {
+    res.status(401).send('Faltan variables');
+  }
+}
+
+exports.modificar = (req, res) => {
+  if (req.body && req.params.id) {
+    db.usuarios.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    }).then(() => {
+      res.status(202).json({
+        ok: true,
+        msg: `Se modificó el usuario ${req.params.id} correctamente`,
+      });
+    }).catch(err => {
+      res.status(409).send(err);
+    });
+  } else {
+    res.status(401).send('Faltan variables');
+  }
 };
 
 exports.listaUsuarioAsignar = (req, res) => {

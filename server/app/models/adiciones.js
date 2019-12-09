@@ -8,8 +8,12 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    fecha: {
-      type: DataTypes.TIME,
+    fecha_ini: {
+      type: DataTypes.DATEONLY,
+      allowNull: false
+    },
+    fecha_fin: {
+      type: DataTypes.DATEONLY,
       allowNull: false
     },
     nro_mesa: {

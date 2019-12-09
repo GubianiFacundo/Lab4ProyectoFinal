@@ -1,18 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Mozo } from 'src/app/classes/mozo';
 import { DataService } from 'src/app/services/data.service';
-import $ from 'jquery';
-
+import { Plato } from 'src/app/classes/plato';
 
 @Component({
-  selector: 'app-mozo',
-  templateUrl: './mozo.component.html',
-  styleUrls: ['./mozo.component.css'],
+  selector: 'app-plato',
+  templateUrl: './plato.component.html',
+  styleUrls: ['./plato.component.css']
 })
-export class MozoComponent implements OnInit, OnDestroy {
+export class PlatoComponent implements OnInit, OnDestroy {
 
-  mozo = new Mozo();
-  mozoEdit = { nombre: '', nro_mozo: -1 };
+  plato = new Plato();
+  platoEdit = { desc: '', precio_costo: 0, porc_gan: 0 };
   ok = false;
   notOk = false;
   okEdit = false;
@@ -27,11 +25,11 @@ export class MozoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.obtenerMozo()
+    this.obtenerPlato()
   }
 
   ngOnDestroy() {
-    this.obtenerMozo()
+    this.obtenerPlato()
   }
 
   async refresh() {
@@ -39,8 +37,8 @@ export class MozoComponent implements OnInit, OnDestroy {
     await this.ngOnInit();
   }
 
-  generarMozo() {
-    this.dataSrv.postMozo(this.mozo.nombre, this.mozo.nro_mozo).subscribe((res) => {
+  generarPlato() {
+    this.dataSrv.postPlato(this.plato.desc, this.plato.precio_costo, this.plato.porc_gan).subscribe((res) => {
       this.ok = true;
       this.response = res;
       setTimeout(() => {
@@ -55,11 +53,11 @@ export class MozoComponent implements OnInit, OnDestroy {
         }, 2500);
       })
 
-    this.obtenerMozo()
+    this.obtenerPlato()
   }
 
-  obtenerMozo() {
-    this.dataSrv.getMozo().subscribe((res: []) => {
+  obtenerPlato() {
+    this.dataSrv.getPlato().subscribe((res: []) => {
       console.log(res)
       this.lista = res;
     },
@@ -68,16 +66,19 @@ export class MozoComponent implements OnInit, OnDestroy {
       })
   }
 
-  editarMozo(selectedItem: any) {
-    var body = { nombre: this.mozoEdit.nombre, nro_mozo: this.mozoEdit.nro_mozo }
-    if (this.mozoEdit.nombre == '') {
-      body.nombre = selectedItem.nombre
+  editarPlato(selectedItem: any) {
+    var body = { desc: this.platoEdit.desc, precio_costo: this.platoEdit.precio_costo, porc_gan: this.platoEdit.porc_gan }
+    if (this.platoEdit.desc == '') {
+      body.desc = selectedItem.desc
     }
-    if (this.mozoEdit.nro_mozo == -1) {
-      body.nro_mozo = selectedItem.nro_mozo
+    if (this.platoEdit.precio_costo == 0) {
+      body.precio_costo = selectedItem.precio_costo
+    }
+    if (this.platoEdit.porc_gan == 0) {
+      body.porc_gan = selectedItem.porc_gan
     }
 
-    this.dataSrv.putMozo(selectedItem.id, body).subscribe((res) => {
+    this.dataSrv.putPlato(selectedItem.id, body).subscribe((res) => {
       this.okEdit = true;
       this.response = res;
       setTimeout(() => {
@@ -91,13 +92,13 @@ export class MozoComponent implements OnInit, OnDestroy {
           this.notOkEdit = false;
         }, 2500);
       })
-    this.mozoEdit.nombre = '';
-    this.mozoEdit.nro_mozo = -1;
-    this.obtenerMozo()
+
+    this.platoEdit = { desc: '', precio_costo: 0, porc_gan: 0 };
+    this.obtenerPlato()
   }
 
-  borrarMozo(selectedItem: any) {
-    this.dataSrv.deleteMozo(selectedItem.id).subscribe((res) => {
+  borrarPlato(selectedItem: any) {
+    this.dataSrv.deletePlato(selectedItem.id).subscribe((res) => {
       this.okDel = true;
       this.response = res;
       setTimeout(() => {
@@ -113,6 +114,7 @@ export class MozoComponent implements OnInit, OnDestroy {
         }, 2500);
       }
     )
-    this.obtenerMozo()
+    this.obtenerPlato()
   }
+
 }

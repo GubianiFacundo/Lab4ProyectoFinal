@@ -1,14 +1,16 @@
 export class Adicion {
-  fecha: Date;
+  fecha_ini: Date;
+  fecha_fin: Date;
   nro_mesa: Number;
   id_mozo: Number;
   estado: String;
   total: Number;
 
   constructor() {
-      this.fecha = new Date();
-      this.nro_mesa = 0;
-      this.id_mozo = 0;
+      this.fecha_ini = new Date();
+      this.fecha_fin = new Date();
+      this.nro_mesa = 1;
+      this.id_mozo = 1;
       this.estado = '';
       this.total = 0;
   }

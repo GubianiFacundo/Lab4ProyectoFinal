@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { Usuario } from 'src/app/classes/usuario';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-register',
@@ -10,22 +11,32 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  usuario = { nombre: '', clave: '', fechaFin: Date() };
+  usuario = { nombre: '', pass: '', fechaFin: Date() };
   error = false;
   enviado = false;
+  ok = false;
+  notOk = false;
+  response = {};
 
-  constructor(private authServer: AuthService, private router: Router, private httpCli: HttpClient) { }
+  constructor(private dataSrv: DataService) { }
 
   ngOnInit() {
   }
 
   registrar() {
-    this.httpCli.post('http://localhost:8000/api/register', {
-      usuario: this.usuario.nombre,
-      pass: this.usuario.clave,
-      rol: 'SUP'
-    }).subscribe(res => {
-      console.log(res)
-    })
+    this.dataSrv.postUsuario(this.usuario.nombre, this.usuario.pass).subscribe((res) => {
+      this.ok = true;
+      this.response = res;
+      setTimeout(() => {
+        this.ok = false;
+      }, 2500);
+    },
+      (error) => {
+        this.notOk = true;
+        this.response = error.error;
+        setTimeout(() => {
+          this.notOk = false;
+        }, 2500);
+      })
   }
 }

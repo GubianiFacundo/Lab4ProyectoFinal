@@ -1,0 +1,50 @@
+<div class="container-fluid">
+  <br>
+  <h2>Usuarios:</h2>
+
+  <button type="button" class="btn btn-primary float-right" (click)="refresh()" id="refresh">
+    Refrescar
+  </button>
+
+  <div [hidden]="okEdit == false" class="alert alert-success">
+    {{ response.msg }}
+  </div>
+  <div [hidden]="notOkEdit == false" class="alert alert-danger">
+    {{ response.msg }}
+  </div>
+  <div [hidden]="okDel == false" class="alert alert-success">
+    {{ response.msg }}
+  </div>
+  <div [hidden]="notOkDel == false" class="alert alert-danger">
+    {{ response.msg }}
+  </div>
+  <!-- LISTAR USUARIOS -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Contraseña</th>
+        <th scope="col">Rol</th>
+        <th scope="col">Editar</th>
+        <th scope="col">Borrar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of lista" scope="row">
+        <td>{{ i.id }}</td>
+        <td><input name="nombreUserEdit" type="text" class="form-control" style="width: 100%;" [ngModel]="i.nombre"
+            required [(ngModel)]="userEdit.nombre"></td>
+        <td><input name="passUserEdit" type="password" class="form-control" style="width: 100%;"
+            [ngModel]="i.pass" required [(ngModel)]="userEdit.pass"></td>
+        <td>{{ i.rol_id }}</td>
+        <td><button type="button" class="btn btn-primary float-left" (click)="editarUser(i)" id="editUserBtn">
+            <fa name="fas fa-edit"></fa>
+          </button></td>
+        <td><button type="button" class="btn btn-danger float-left" (click)="borrarUser(i)" id="deleteUserBtn">
+            <fa name="fas fa-trash"></fa>
+          </button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

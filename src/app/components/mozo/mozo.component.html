@@ -1,17 +1,82 @@
 <div class="container-fluid">
   <br>
+
+  <!-- CREAR MOZO -->
   <div class="center">
-    <h2>Mozo</h2>
-    <div class="d-inline-flex form-group" style="width: 650px;">
-      <label>Nombre:</label> &nbsp;
-      <input type="text" class="form-control" style="width: 100%;" maxlength="60" required
-        [(ngModel)]="mozo.nombre">
-      <label>Nro Mozo:</label> &nbsp;
-      <input type="number" class="form-control" style="width: 100%;" required
-        [(ngModel)]="mozo.nro_mozo">
+    <h2>Mozo:</h2>
+    <form #mozoForm="ngForm">
+      <div class="form-row">
+        <div class="col">
+          <label>Nombre:</label> &nbsp;
+          <input name="nombreMozo" type="text" class="form-control" style="width: 100%;" maxlength="60" required
+            [(ngModel)]="mozo.nombre" #nombreMozo="ngModel">
+          <div [hidden]="nombreMozo.valid || nombreMozo.pristine" class="alert alert-danger">
+            El nombre del Mozo es obligatorio !!!
+          </div>
+        </div>
+        <div class="col">
+          <label>Nro Mozo:</label> &nbsp;
+          <input name="nroMozo" type="number" class="form-control" min="1" style="width: 100%;" required
+            [(ngModel)]="mozo.nro_mozo">
+        </div>
+      </div>
+      <br>
+      <div class="d-inline-flex justify-content-around" style="width: 500px;">
+        <button [disabled]="!mozoForm.form.valid" class="btn btn-success float-left" (click)="generarMozo()">Registrar
+          Mozo</button>
+      </div>
+    </form>
+    <br>
+    <div [hidden]="ok == false" class="alert alert-success">
+      {{ response.msg }}
+    </div>
+    <div [hidden]="notOk == false" class="alert alert-danger">
+      {{ response.msg }}
     </div>
   </div>
-  <div class="d-inline-flex justify-content-around" style="width: 500px;">
-    <button class="btn btn-success float-left" (click)="generarMozo()">Registrar Mozo</button>
+
+
+  <button type="button" class="btn btn-primary float-right" (click)="refresh()" id="refresh">
+    Refrescar
+  </button>
+
+  <div [hidden]="okEdit == false" class="alert alert-success">
+    {{ response.msg }}
   </div>
+  <div [hidden]="notOkEdit == false" class="alert alert-danger">
+    {{ response.msg }}
+  </div>
+  <div [hidden]="okDel == false" class="alert alert-success">
+    {{ response.msg }}
+  </div>
+  <div [hidden]="notOkDel == false" class="alert alert-danger">
+    {{ response.msg }}
+  </div>
+  <!-- LISTAR MOZO -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Nro Mozo</th>
+        <th scope="col">Editar</th>
+        <th scope="col">Borrar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of lista" scope="row">
+        <td>{{ i.id }}</td>
+        <td><input name="nombreMozoEdit" type="text" class="form-control" style="width: 100%;" [ngModel]="i.nombre"
+            required [(ngModel)]="mozoEdit.nombre"></td>
+        <td><input name="nroMozoEdit" type="number" class="form-control" min="1" style="width: 100%;"
+            [ngModel]="i.nro_mozo" required [(ngModel)]="mozoEdit.nro_mozo"></td>
+        <td><button type="button" class="btn btn-primary float-left" (click)="editarMozo(i)" id="editMozoBtn">
+            <fa name="fas fa-edit"></fa>
+          </button></td>
+        <td><button type="button" class="btn btn-danger float-left" (click)="borrarMozo(i)" id="deleteMozoBtn">
+            <fa name="fas fa-trash"></fa>
+          </button></td>
+      </tr>
+    </tbody>
+  </table>
 </div>

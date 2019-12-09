@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
           } else {
             sessionStorage.setItem('isLogged', 'true');
             sessionStorage.setItem('user', this.usuario.nombre);
-            this.router.navigate(['/register']);
+            this.router.navigate(['/usuarios']);
           }
         }
       });

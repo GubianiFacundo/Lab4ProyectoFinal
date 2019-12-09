@@ -1,0 +1,96 @@
+<div class="container-fluid">
+  <br>
+
+  <!-- CREAR PLATO -->
+  <div class="center">
+    <h2>Plato:</h2>
+    <form #platoForm="ngForm">
+      <div class="form-row">
+        <div class="col">
+          <label>Descripción:</label> &nbsp;
+          <input name="descPlato" type="text" class="form-control" style="width: 100%;" maxlength="60" required
+            [(ngModel)]="plato.desc" #descPlato="ngModel">
+          <div [hidden]="descPlato.valid || descPlato.pristine" class="alert alert-danger">
+            La descripción del Plato es obligatoria !!!
+          </div>
+        </div>
+        <div class="col">
+          <label>Precio de Costo:</label> &nbsp;
+          <input name="precioCosto" type="number" class="form-control" min="0" style="width: 100%;" required
+            [(ngModel)]="plato.precio_costo"  #precioCosto="ngModel">
+          <div [hidden]="precioCosto.valid || precioCosto.pristine" class="alert alert-danger">
+            El precio de costo del Plato es obligatorio !!!
+          </div>
+        </div>
+        <div class="col">
+          <label>Porcentaje de Ganancia:</label> &nbsp;
+          <input name="porcGan" type="number" class="form-control" min="0" style="width: 100%;" required
+            [(ngModel)]="plato.porc_gan" #porcGan="ngModel">
+          <div [hidden]="porcGan.valid || porcGan.pristine" class="alert alert-danger">
+            El porcentaje de ganancia del Plato es obligatorio !!!
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="d-inline-flex justify-content-around" style="width: 500px;">
+        <button [disabled]="!platoForm.form.valid" class="btn btn-success float-left" (click)="generarPlato()">Registrar
+          Plato</button>
+      </div>
+    </form>
+    <br>
+    <div [hidden]="ok == false" class="alert alert-success">
+      {{ response.msg }}
+    </div>
+    <div [hidden]="notOk == false" class="alert alert-danger">
+      {{ response.msg }}
+    </div>
+  </div>
+
+
+  <button type="button" class="btn btn-primary float-right" (click)="refresh()" id="refresh">
+    Refrescar
+  </button>
+
+  <div [hidden]="okEdit == false" class="alert alert-success">
+    {{ response.msg }}
+  </div>
+  <div [hidden]="notOkEdit == false" class="alert alert-danger">
+    {{ response.msg }}
+  </div>
+  <div [hidden]="okDel == false" class="alert alert-success">
+    {{ response.msg }}
+  </div>
+  <div [hidden]="notOkDel == false" class="alert alert-danger">
+    {{ response.msg }}
+  </div>
+  <!-- LISTAR MOZO -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Descripción</th>
+        <th scope="col">Precio de Costo</th>
+        <th scope="col">Porcentaje de Ganancia</th>
+        <th scope="col">Editar</th>
+        <th scope="col">Borrar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of lista" scope="row">
+        <td>{{ i.id }}</td>
+        <td><input name="descplatoEdit" type="text" class="form-control" style="width: 100%;" [ngModel]="i.desc"
+            required [(ngModel)]="platoEdit.desc"></td>
+        <td><input name="precioCostoEdit" type="number" class="form-control" min="0" style="width: 100%;"
+            [ngModel]="i.precio_costo" required [(ngModel)]="platoEdit.precio_costo"></td>
+        <td><input name="porcGanEdit" type="number" class="form-control" min="0" style="width: 100%;"
+            [ngModel]="i.porc_gan" required [(ngModel)]="platoEdit.porc_gan"></td>
+        <td><button type="button" class="btn btn-primary float-left" (click)="editarPlato(i)" id="editPlatoBtn">
+            <fa name="fas fa-edit"></fa>
+          </button></td>
+        <td><button type="button" class="btn btn-danger float-left" (click)="borrarPlato(i)" id="deletePlatoBtn">
+            <fa name="fas fa-trash"></fa>
+          </button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

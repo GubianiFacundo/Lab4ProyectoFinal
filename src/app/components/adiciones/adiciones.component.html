@@ -1,0 +1,160 @@
+<div class="container-fluid">
+  <br>
+
+  <!-- CREAR ADICION -->
+  <div class="center">
+    <h2>Adición:</h2>
+    <form #adicionForm="ngForm">
+      <div class="form-row">
+        <div class="col">
+          <label>Nro Mesa:</label> &nbsp;
+          <input name="nroMesaAdicion" type="number" class="form-control" style="width: 100%;" maxlength="60" required
+            [(ngModel)]="adicion.nro_mesa" #nroMesaAdicion="ngModel" min="1" minlength="1">
+          <div [hidden]="nroMesaAdicion.valid || nroMesaAdicion.pristine" class="alert alert-danger">
+            El número de la Mesa es obligatorio !!!
+          </div>
+        </div>
+        <div class="col">
+          <label>Nro Mozo:</label> &nbsp;
+          <select name="mozoToSelect" ngDefaultControl id="busqueda1"
+            style="width: 100%; border-start-end-radius: 10%; height: 35px;" [(ngModel)]="adicion.id_mozo"
+            [ngModelOptions]="{standalone: true}">
+            <option name="mozoToSelect2" ngDefaultControl *ngFor="let mozo of listaMozos" [ngValue]="mozo.id">
+              {{ mozo.id }}
+              {{ mozo.nombre }}</option>
+          </select>
+          <!-- <input name="nroMozoAdicion" type="number" class="form-control" min="1" minlength="1" style="width: 100%;"
+            required [(ngModel)]="adicion.id_mozo"> -->
+        </div>
+        <div class="col">
+          <label>Fecha Fin de pago:</label> &nbsp;
+          <input name="fechaFinAdicion" type="date" class="form-control" style="width: 100%;" required
+            [ngModel]="adicion.fecha_fin | date:'yyyy-MM-dd'" (ngModelChange)="fechaFin = $event">
+        </div>
+      </div>
+      <br>
+      <div class="d-inline-flex justify-content-around" style="width: 500px;">
+        <button [disabled]="!adicionForm.form.valid" class="btn btn-success float-left"
+          (click)="generarAdicion()">Registrar
+          Adición</button>
+      </div>
+    </form>
+    <br>
+    <div [hidden]="ok == false" class="alert alert-success">
+      {{ response.msg }}
+    </div>
+    <div [hidden]="notOk == false" class="alert alert-danger">
+      {{ response.msg }}
+    </div>
+  </div>
+
+  <!-- Search -->
+  <form class="input-group-prepend" style="max-width: 700px; margin:0 auto;">
+    <select name="mozoToSelect" ngDefaultControl id="busqueda1"
+      style="width: 600px; border-start-end-radius: 10%; height: 35px;" [(ngModel)]="selectedMozo"
+      [ngModelOptions]="{standalone: true}">
+      <option name="mozoToSelect2" ngDefaultControl *ngFor="let mozo of listaMozos" [ngValue]="mozo.id"> {{ mozo.id }}
+        {{ mozo.nombre }}</option>
+    </select>&nbsp;
+    <input type="date" class="form-control" id="busqueda2" [ngModel]="fecha_ini | date:'yyyy-MM-dd'"
+      (ngModelChange)="fecha_ini = $event" name="inputFechaIni"> &nbsp;
+    <input type="date" class="form-control" id="busqueda3" [ngModel]="fecha_fin | date:'yyyy-MM-dd'"
+      (ngModelChange)="fecha_fin = $event" name="inputFechaFin">
+    <button style="margin-left:5px; width: 100%" class="btn btn-info" (click)="obtenerAdicion()"><i class="fa fa-search"
+        name="buttonBuscar"></i> Buscar</button>
+  </form>
+  <br>
+
+
+  <button type="button" class="btn btn-primary float-right" (click)="refresh()" id="refresh">
+    Refrescar
+  </button>
+
+  <div [hidden]="okEdit == false" class="alert alert-success">
+    {{ response.msg }}
+  </div>
+  <div [hidden]="notOkEdit == false" class="alert alert-danger">
+    {{ response.msg }}
+  </div>
+  <div [hidden]="okDel == false" class="alert alert-success">
+    {{ response.msg }}
+  </div>
+  <div [hidden]="notOkDel == false" class="alert alert-danger">
+    {{ response.msg }}
+  </div>
+  <!-- LISTAR MOZO -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Nro Mesa</th>
+        <th scope="col">Nro Mozo</th>
+        <th scope="col">Fecha Inicio</th>
+        <th scope="col">Fecha Fin</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Total</th>
+        <th scope="col">Agregar Detalle</th>
+        <th scope="col">Editar</th>
+        <th scope="col">Borrar</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let i of lista" scope="row">
+      <tr>
+        <td>{{ i.id }}</td>
+        <td><input name="nroMesaAdicionEdit" type="number" class="form-control" style="width: 100%;"
+            [ngModel]="i.nro_mesa" required [(ngModel)]="adicionEdit.nro_mesa"></td>
+        <td><select name="mozoToSelect" ngDefaultControl id="busqueda1"
+            style="width: auto; border-start-end-radius: 10%; height: 35px;" [(ngModel)]="i.id_mozo"
+            [ngModelOptions]="{standalone: true}">
+            <option name="mozoToSelect2" ngDefaultControl *ngFor="let mozo of listaMozos" [ngValue]="mozo.id">
+              {{ mozo.id }}
+              {{ mozo.nombre }}</option>
+          </select></td>
+        <td>{{ i.fecha_ini }}</td>
+        <td><input name="fechaFinMozoEdit" type="date" class="form-control" style="width: 100%;" [ngModel]="i.fecha_fin"
+            required [(ngModel)]="adicionEdit.fecha_fin"></td>
+        <td>{{ i.estado }}</td>
+        <td>{{ i.total }}</td>
+        <td><button type="button" class="btn btn-success float-left" (click)="agregarDetalle(i)" id="addAdicionBtn"
+            [hidden]="i.estado != 'ABIERTA'">
+            <fa name="fas fa-plus"></fa>
+          </button></td>
+        <td><button type="button" class="btn btn-primary float-left" (click)="editarAdicion(i)" id="editAdicionBtn"
+            [hidden]="i.estado != 'ABIERTA'">
+            <fa name="fas fa-edit"></fa>
+          </button></td>
+        <td><button type="button" class="btn btn-danger float-left" (click)="borrarAdicion(i)" id="deleteAdicionBtn">
+            <fa name="fas fa-trash"></fa>
+          </button></td>
+        <td><button type="button" class="btn btn-danger float-left" (click)="obtenerDetalle(i)" id="detalleAdicionBtn">
+            <fa name="fas fa-trash"></fa>
+          </button></td>
+        <td>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Plato</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Precio Unitario</th>
+                <th scope="col">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let x of listaDetalles" scope="row">
+                <td>{{ x.id }}</td>
+                <td>{{ x.id_plato }}</td>
+                <td>{{ x.cantidad }}</td>
+                <td>{{ x.precio_unit }}</td>
+                <td>{{ x.subtotal }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <!-- <tr> -->
+
+      <!-- </tr> -->
+    </tbody>
+  </table>
+</div>
