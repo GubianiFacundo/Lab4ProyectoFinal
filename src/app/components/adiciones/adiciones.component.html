@@ -50,7 +50,7 @@
 
   <!-- Search -->
   <form class="input-group-prepend" style="max-width: 700px; margin:0 auto;">
-    <select name="mozoToSelect" ngDefaultControl id="busqueda1"
+    <select name="mozoToSelect" ngDefaultControl id="busqueda2"
       style="width: 600px; border-start-end-radius: 10%; height: 35px;" [(ngModel)]="selectedMozo"
       [ngModelOptions]="{standalone: true}">
       <option name="mozoToSelect2" ngDefaultControl *ngFor="let mozo of listaMozos" [ngValue]="mozo.id"> {{ mozo.id }}
@@ -102,8 +102,8 @@
       <tr>
         <td>{{ i.id }}</td>
         <td><input name="nroMesaAdicionEdit" type="number" class="form-control" style="width: 100%;"
-            [ngModel]="i.nro_mesa" required [(ngModel)]="adicionEdit.nro_mesa"></td>
-        <td><select name="mozoToSelect" ngDefaultControl id="busqueda1"
+            [ngModel]="i.nro_mesa" required [(ngModel)]="adicionEdit.nro_mesa" min="1" minlength="1"></td>
+        <td><select name="mozoToSelect" ngDefaultControl id="busqueda3"
             style="width: auto; border-start-end-radius: 10%; height: 35px;" [(ngModel)]="i.id_mozo"
             [ngModelOptions]="{standalone: true}">
             <option name="mozoToSelect2" ngDefaultControl *ngFor="let mozo of listaMozos" [ngValue]="mozo.id">
@@ -114,7 +114,7 @@
         <td><input name="fechaFinMozoEdit" type="date" class="form-control" style="width: 100%;" [ngModel]="i.fecha_fin"
             required [(ngModel)]="adicionEdit.fecha_fin"></td>
         <td>{{ i.estado }}</td>
-        <td>{{ i.total }}</td>
+        <td>${{ i.total }}</td>
         <td><button type="button" class="btn btn-success float-left" (click)="agregarDetalle(i)" id="addAdicionBtn"
             [hidden]="i.estado != 'ABIERTA'">
             <fa name="fas fa-plus"></fa>
@@ -126,35 +126,48 @@
         <td><button type="button" class="btn btn-danger float-left" (click)="borrarAdicion(i)" id="deleteAdicionBtn">
             <fa name="fas fa-trash"></fa>
           </button></td>
-        <td><button type="button" class="btn btn-danger float-left" (click)="obtenerDetalle(i)" id="detalleAdicionBtn">
+      </tr>
+      <tr *ngFor="let x of i.detalles" scope="row">
+        <td>Detalle:</td>
+        <td>Id detalle: {{ x.id }}</td>
+        <td>Plato: <select name="platoToSelect" ngDefaultControl id="busqueda4"
+            style="width: auto; border-start-end-radius: 10%; height: 35px;" [ngModel]="x.id_plato"
+            [(ngModel)]="selectedPlato" [ngModelOptions]="{standalone: true}">
+            <option name="mozoToSelect2" ngDefaultControl *ngFor="let plato of listaPlatos" [ngValue]="plato.id"
+              (ngValue)="plato.id">
+              {{ plato.desc }}</option>
+          </select></td>
+        <td>Cantidad: <input name="cantidadAdicionEdit" type="number" class="form-control" style="width: 100%;"
+            [ngModel]="x.cantidad" required [(ngModel)]="adicionEdit.cantidad" min="1" minlength="1"></td>
+        <td name="precioDetalle">Precio Unitario:
+          ${{ x.plato.precio_costo * (x.plato.porc_gan/100) + x.plato.precio_costo }}</td>
+        <td>Subtotal: ${{ x.subtotal }}</td>
+        <td> - </td>
+        <td> - </td>
+        <td><button type="button" class="btn btn-primary float-left" (click)="editarDetalle(x)"
+            id="editDetalleAdicionBtn" [hidden]="i.estado != 'ABIERTA'">
+            <fa name="fas fa-edit"></fa>
+          </button></td>
+        <td><button type="button" class="btn btn-danger float-left" (click)="borrarDetalle(x)"
+            id="deleteDetalleAdicionBtn" [hidden]="i.estado != 'ABIERTA'">
             <fa name="fas fa-trash"></fa>
           </button></td>
-        <td>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Plato</th>
-                <th scope="col">Cantidad</th>
-                <th scope="col">Precio Unitario</th>
-                <th scope="col">Subtotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let x of listaDetalles" scope="row">
-                <td>{{ x.id }}</td>
-                <td>{{ x.id_plato }}</td>
-                <td>{{ x.cantidad }}</td>
-                <td>{{ x.precio_unit }}</td>
-                <td>{{ x.subtotal }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
       </tr>
-      <!-- <tr> -->
-
-      <!-- </tr> -->
+      <tr [hidden]="i.estado != 'ABIERTA'">
+        <td> - </td>
+        <td> - </td>
+        <td> - </td>
+        <td> - </td>
+        <td> - </td>
+        <td> - </td>
+        <td> - </td>
+        <td> - </td>
+        <td [hidden]="i.estado != 'ABIERTA'">CERRAR ADICIÓN</td>
+        <td><button type="button" class="btn btn-secondary float-left" (click)="cerrarAdicion(i)" id="cerrarAdicionBtn"
+            [hidden]="i.estado != 'ABIERTA'">
+            <fa name="far fa-window-close"></fa>
+          </button></td>
+      </tr>
     </tbody>
   </table>
 </div>

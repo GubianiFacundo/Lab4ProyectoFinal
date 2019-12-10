@@ -6,27 +6,34 @@ var morgan = require('morgan');
 const db = require('./config/db.config');
 
 // ***** CONNECTION TO DB
-// new Promise((resolve, reject) => {
-//   db.init();
+new Promise((resolve, reject) => {
+  db.init();
 
-//   db.sequelize.sync({
-//     force: true
-//   }).then(() => {
-//     console.log('**** Drop DB y Resync ****');
+  db.sequelize.sync({
+    // force: true
+  }).then(() => {
+    console.log('**** Drop DB y Resync ****');
 
-//     db.usuarios.create({
-//       nombre: 'admin',
-//       pass: 'admin',
-//       rol_id: 'ADM'
-//     })
-//   })
+    // db.usuarios.create({
+    //   nombre: 'admin',
+    //   pass: 'admin',
+    //   rol_id: 'ADM'
+    // })
 
-//   if (err) {
-//     reject(err);
-//   } else {
-//     resolve('');
-//   }
-// })
+    // db.plato.create({
+    //   id: 0,
+    //   desc: '',
+    //   precio_costo: 0,
+    //   porc_gan: 1
+    // })
+  })
+
+  if (err) {
+    reject(err);
+  } else {
+    resolve('');
+  }
+})
 
 
 

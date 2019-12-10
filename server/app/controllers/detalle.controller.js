@@ -3,7 +3,7 @@ const formDate = require('./formDate');
 const op = db.Sequelize.Op;
 
 exports.registerDetalle = (req, res) => {
-  if (req.body && req.body.id_plato && req.body.cantidad && req.body.precio_unit && req.body.id_adicion) {
+  if (req.body.id_plato && req.body.cantidad && req.body.precio_unit && req.body.id_adicion) {
     db.detalle.create({
       id_plato: req.body.id_plato,
       cantidad: req.body.cantidad,
@@ -62,6 +62,7 @@ exports.borrar = (req, res) => {
 }
 
 exports.modificar = (req, res) => {
+  console.log('a ver', req)
   if (req.body && req.params.id) {
     db.detalle.update(req.body, {
       where: {

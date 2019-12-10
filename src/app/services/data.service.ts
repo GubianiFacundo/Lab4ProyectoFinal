@@ -89,7 +89,7 @@ export class DataService {
   }
 
   // DETALLE
-  postDetalle(id_plato: Number, cantidad: Number, precio_unit: Number, id_adicion: Number) {
+  postDetalle(id_plato: String, cantidad: String, precio_unit: String, id_adicion: String) {
     const body = { id_plato: id_plato, cantidad: cantidad, precio_unit: precio_unit, id_adicion: id_adicion }
     return this.httpCli.post(baseUrl + '/api/registerDetalle', body, httpOptions);
   }

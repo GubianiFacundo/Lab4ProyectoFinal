@@ -11,7 +11,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
 
 
   adicion = new Adicion();
-  adicionEdit = { nro_mesa: -1, id_mozo: -1, fecha_fin: new Date() };
+  adicionEdit = { nro_mesa: -1, id_mozo: -1, fecha_fin: new Date(), id_plato: -1, cantidad: -1, precio_unit: -1 };
   fecha_ini: Date;
   fecha_fin: Date;
   ok = false;
@@ -23,8 +23,11 @@ export class AdicionesComponent implements OnInit, OnDestroy {
   response = {};
   lista = [];
   listaMozos = [];
+  listaPlatos = [];
   listaDetalles = [];
   selectedMozo: '';
+  selectedPlato = -1;
+  // detallePrecioEdit = 0;
 
   constructor(private dataSrv: DataService) {
 
@@ -35,9 +38,9 @@ export class AdicionesComponent implements OnInit, OnDestroy {
     this.fecha_ini.setMonth(this.fecha_ini.getMonth() - 1);
     this.fecha_fin = new Date();
 
-
+    this.obtenerPlato();
     this.obtenerMozos();
-    // this.obtenerAdicion()
+    this.obtenerAdicion();
   }
 
   ngOnDestroy() {
@@ -47,6 +50,17 @@ export class AdicionesComponent implements OnInit, OnDestroy {
   async refresh() {
     await this.ngOnDestroy();
     await this.ngOnInit();
+  }
+
+  obtenerPlato() {
+    this.dataSrv.getPlato().subscribe((res: []) => {
+      console.log(res)
+      this.listaPlatos = res;
+      this.listaPlatos.unshift({ id: '0', desc: '' });
+    },
+      (error) => {
+        console.log(error)
+      })
   }
 
   generarAdicion() {
@@ -72,17 +86,77 @@ export class AdicionesComponent implements OnInit, OnDestroy {
     this.dataSrv.getAdicion(this.fecha_ini, this.fecha_fin, this.selectedMozo).subscribe((res: []) => {
       console.log(res)
       this.lista = res;
-      res.forEach((e: any) => {
-        // this.obtenerDetalle(e.id)
-        this.dataSrv.getDetalle(e.id).subscribe((resp: []) => {
-          // this.lista.detalles = resp;
-        })
-      });
       console.log(this.lista)
     },
       (error) => {
         console.log(error)
       })
+  }
+
+  agregarDetalle(selectedItem: any) {
+    this.dataSrv.postDetalle("0", "0", "0", selectedItem.id.toString()).subscribe((res: []) => {
+      console.log(res)
+    },
+      (error) => {
+        console.log(error)
+      }
+    )
+    this.refresh();
+  }
+
+  editarDetalle(selectedItem: any) {
+    console.log('ESTO ES EL ID DE DETALLE', selectedItem)
+    console.log(this.selectedPlato)
+    var subtotal = (selectedItem.plato.precio_costo * (selectedItem.plato.porc_gan / 100) + selectedItem.plato.precio_costo)
+    var body = { id_plato: this.selectedPlato, cantidad: this.adicionEdit.cantidad, precio_unit: this.adicionEdit.precio_unit, subtotal: (this.adicionEdit.cantidad * subtotal) }
+    if (this.selectedPlato == -1) {
+      body.id_plato = selectedItem.id_plato
+    }
+    if (this.adicionEdit.cantidad == -1) {
+      body.cantidad = selectedItem.cantidad
+    }
+    if (this.adicionEdit.precio_unit == -1) {
+      body.precio_unit = selectedItem.precio_unit
+    }
+
+    this.dataSrv.putDetalle(selectedItem.id, body).subscribe((res) => {
+      this.okEdit = true;
+      this.response = res;
+      setTimeout(() => {
+        this.okEdit = false;
+      }, 2500);
+    },
+      (error) => {
+        this.notOkEdit = true;
+        this.response = error.error;
+        setTimeout(() => {
+          this.notOkEdit = false;
+        }, 2500);
+      }
+    )
+
+    this.refresh();
+  }
+
+  borrarDetalle(selectedItem: any) {
+    this.dataSrv.deleteDetalle(selectedItem.id).subscribe((res) => {
+      this.okDel = true;
+      this.response = res;
+      setTimeout(() => {
+        this.okDel = false;
+      }, 2500);
+    },
+      (error) => {
+        console.log(error)
+        this.notOkDel = true;
+        this.response = error.error;
+        setTimeout(() => {
+          this.notOkDel = false;
+        }, 2500);
+      }
+    )
+
+    this.refresh();
   }
 
   obtenerDetalle(selectedItem: any) {
@@ -93,6 +167,37 @@ export class AdicionesComponent implements OnInit, OnDestroy {
       (error) => {
         console.log(error)
       })
+  }
+
+  cerrarAdicion(selectedItem: any) {
+    var total = 0;
+    selectedItem.detalles.forEach(e => {
+      total += e.subtotal
+    });
+
+    var body = { estado: 'CERRADA', total: total }
+
+    if (confirm("No podrá editar la adición luego. Esta seguro que desea cerrarla ¿?")) {
+      this.dataSrv.putAdicion(selectedItem.id, body).subscribe((res) => {
+        this.okEdit = true;
+        this.response = res;
+        setTimeout(() => {
+          this.okEdit = false;
+        }, 2500);
+      },
+        (error) => {
+          this.notOkEdit = true;
+          this.response = error.error;
+          setTimeout(() => {
+            this.notOkEdit = false;
+          }, 2500);
+        }
+      )
+
+      this.refresh();
+    } else {
+      return false;
+    }
   }
 
   editarAdicion(selectedItem: any) {

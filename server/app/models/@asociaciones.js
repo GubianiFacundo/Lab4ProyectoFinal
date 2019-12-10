@@ -6,26 +6,20 @@ module.exports = (db, sequelize, Sequelize) => {
   db.detalle = require('../models/detalle')(sequelize, Sequelize);
   db.plato = require('../models/plato')(sequelize, Sequelize);
   db.venta = require('../models/venta')(sequelize, Sequelize);
-  
-  // db.adiciones.hasOne(db.mozo, {
-  //   as: 'mozo',
-  //   constraints: false
-  // });
 
-  // db.detalle.hasOne(db.adiciones, {
-  //   as: 'adiciones',
-  //   constraints: false
-  // });
+  db.detalle.belongsTo(db.plato, {
+    as: 'plato',
+    foreignKey: 'id_plato',
+    targetKey: 'id',
+    constraints: false
+  });
 
-  // db.detalle.hasMany(db.plato, {
-  //   as: 'plato',
-  //   constraints: false
-  // });
-
-  // db.venta.hasOne(db.plato, {
-  //   as: 'plato',
-  //   constraints: false
-  // });
+  db.adiciones.hasMany(db.detalle, {
+    as: 'detalles',
+    foreignKey: 'id_adicion',
+    targetKey: 'id',
+    constraints: false
+  });
 
   return db;
 }

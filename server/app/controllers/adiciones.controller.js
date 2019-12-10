@@ -38,7 +38,11 @@ exports.listaAdicion = (req, res) => {
             [op.between]: [formDate.format(req.query.fecha_ini), formDate.format(req.query.fecha_fin)]
           }
         },
-      }
+      },
+      include: [{
+        as: 'detalles',
+        model: db.detalle
+      }]
     }).then(result => {
       res.status(200).json(result);
     }).catch(err => {
@@ -51,7 +55,15 @@ exports.listaAdicion = (req, res) => {
         fecha_ini: {
           [op.between]: [formDate.format(req.query.fecha_ini), formDate.format(req.query.fecha_fin)]
         },
-      }
+      },
+      include: [{
+        as: 'detalles',
+        model: db.detalle,
+        include: [{
+          as: 'plato',
+          model: db.plato,
+        }]
+      }]
     }).then(result => {
       res.status(200).json(result);
     }).catch(err => {
