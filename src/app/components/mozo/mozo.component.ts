@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Mozo } from 'src/app/classes/mozo';
 import { DataService } from 'src/app/services/data.service';
-import $ from 'jquery';
 
 
 @Component({

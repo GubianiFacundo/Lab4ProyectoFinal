@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Adicion } from 'src/app/classes/adicion';
 import { DataService } from 'src/app/services/data.service';
-import { $ } from 'jquery';
 
 @Component({
   selector: 'app-adiciones',
@@ -119,9 +118,6 @@ export class AdicionesComponent implements OnInit, OnDestroy {
   }
 
   editarDetalle(selectedItem: any) {
-    var a = $('#selectedValue')
-    console.log(a);
-
     var subtotal = this.adicionEdit.cantidad * selectedItem.plato.precio_plato;
     var body = { id_plato: this.selectedPlato, cantidad: this.adicionEdit.cantidad, precio_unit: this.adicionEdit.precio_unit, subtotal: subtotal }
     if (this.selectedPlato == -1) {
@@ -154,7 +150,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
     )
 
     this.refresh();
-    
+
   }
 
   borrarDetalle(selectedItem: any) {
