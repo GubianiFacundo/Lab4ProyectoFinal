@@ -66,6 +66,10 @@ export class DataService {
     return this.httpCli.get(baseUrl + '/api/platos', httpOptions);
   }
 
+  getPlatoId(id: Number) {
+    return this.httpCli.get(baseUrl + '/api/platos/' + id, httpOptions);
+  }
+
   // ADICIONES
   postAdicion(fecha_fin: Date, nro_mesa: Number, id_mozo: Number) {
     const body = { fecha_fin: fecha_fin, nro_mesa: nro_mesa, id_mozo: id_mozo }

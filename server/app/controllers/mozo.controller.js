@@ -48,7 +48,7 @@ exports.borrar = (req, res) => {
       });
     }).catch(err => {
       res.status(409).json({
-        msg: 'ERROR AL ELIMINAR !!!',
+        msg: 'ERROR AL ELIMINAR, El mozo está asociado a una factura !!!',
         err: err
       });
     });

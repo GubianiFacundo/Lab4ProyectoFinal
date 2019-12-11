@@ -19,7 +19,11 @@ module.exports = function(sequelize, DataTypes) {
     porc_gan: {
       type: DataTypes.INTEGER,
       allowNull: false
-    }
+    },
+    precio_plato: {
+      type: DataTypes.DOUBLE,
+      allowNull: true
+    },
   }, {
     tableName: 'plato',
     timestamps: false,

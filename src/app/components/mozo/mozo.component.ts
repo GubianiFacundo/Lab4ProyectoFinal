@@ -55,7 +55,9 @@ export class MozoComponent implements OnInit, OnDestroy {
         }, 2500);
       })
 
-    this.obtenerMozo()
+      this.mozo.nombre = '';
+
+    this.refresh()
   }
 
   obtenerMozo() {
@@ -83,6 +85,7 @@ export class MozoComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.okEdit = false;
       }, 2500);
+      this.refresh()
     },
       (error) => {
         this.notOkEdit = true;
@@ -93,7 +96,7 @@ export class MozoComponent implements OnInit, OnDestroy {
       })
     this.mozoEdit.nombre = '';
     this.mozoEdit.nro_mozo = -1;
-    this.obtenerMozo()
+   
   }
 
   borrarMozo(selectedItem: any) {
@@ -103,6 +106,7 @@ export class MozoComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.okDel = false;
       }, 2500);
+      this.refresh()
     },
       (error) => {
         console.log(error)
@@ -113,6 +117,6 @@ export class MozoComponent implements OnInit, OnDestroy {
         }, 2500);
       }
     )
-    this.obtenerMozo()
+   
   }
 }

@@ -10,7 +10,7 @@ import { Usuario } from 'src/app/classes/usuario';
 })
 export class LoginComponent implements OnInit {
 
-  usuario = { nombre: 'admin', pass: 'admin' };
+  usuario = { nombre: 'admin', pass: 'admin', rol_id: '' };
   error = false;
   enviado = false;
 

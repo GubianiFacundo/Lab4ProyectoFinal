@@ -18,7 +18,7 @@ module.exports = (db, sequelize, Sequelize) => {
     as: 'detalles',
     foreignKey: 'id_adicion',
     targetKey: 'id',
-    constraints: false
+    onDelete: 'cascade'
   });
 
   return db;

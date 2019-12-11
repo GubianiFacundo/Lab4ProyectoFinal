@@ -44,6 +44,7 @@ export class PlatoComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.ok = false;
       }, 2500);
+      this.refresh()
     },
       (error) => {
         this.notOk = true;
@@ -53,7 +54,7 @@ export class PlatoComponent implements OnInit, OnDestroy {
         }, 2500);
       })
 
-    this.obtenerPlato()
+    this.refresh()
   }
 
   obtenerPlato() {
@@ -84,6 +85,7 @@ export class PlatoComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.okEdit = false;
       }, 2500);
+      this.refresh()
     },
       (error) => {
         this.notOkEdit = true;
@@ -94,7 +96,7 @@ export class PlatoComponent implements OnInit, OnDestroy {
       })
 
     this.platoEdit = { desc: '', precio_costo: 0, porc_gan: 0 };
-    this.obtenerPlato()
+    this.refresh()
   }
 
   borrarPlato(selectedItem: any) {
@@ -104,6 +106,7 @@ export class PlatoComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.okDel = false;
       }, 2500);
+      this.refresh()
     },
       (error) => {
         console.log(error)
@@ -114,7 +117,7 @@ export class PlatoComponent implements OnInit, OnDestroy {
         }, 2500);
       }
     )
-    this.obtenerPlato()
+    this.refresh()
   }
 
 }

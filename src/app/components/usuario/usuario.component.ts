@@ -11,6 +11,8 @@ export class UsuarioComponent implements OnInit, OnDestroy {
 
   user = new Usuario();
   userEdit = { nombre: '', pass: '', rol_id: 'USR' };
+  loggedUserName: String;
+  loggedUserRol: String;
   ok = false;
   notOk = false;
   okEdit = false;
@@ -23,6 +25,9 @@ export class UsuarioComponent implements OnInit, OnDestroy {
   constructor(private dataSrv: DataService) { }
 
   ngOnInit() {
+    this.loggedUserName = sessionStorage.getItem('user');
+    console.log(this.loggedUserName)
+
     this.obtenerUser()
   }
 

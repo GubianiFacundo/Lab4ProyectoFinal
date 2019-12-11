@@ -139,8 +139,10 @@
           </select></td>
         <td>Cantidad: <input name="cantidadAdicionEdit" type="number" class="form-control" style="width: 100%;"
             [ngModel]="x.cantidad" required [(ngModel)]="adicionEdit.cantidad" min="1" minlength="1"></td>
-        <td name="precioDetalle">Precio Unitario:
-          ${{ x.plato.precio_costo * (x.plato.porc_gan/100) + x.plato.precio_costo }}</td>
+        <td>Precio Unitario: $
+          <input id="selectedValue" name="precioDetalle" type="number" class="form-control" style="width: 100%;"
+            [ngModel]="x.plato.precio_plato" required [(ngModel)]="adicionEdit.precio_unit" min="1" minlength="1" disabled>
+        </td>
         <td>Subtotal: ${{ x.subtotal }}</td>
         <td> - </td>
         <td> - </td>

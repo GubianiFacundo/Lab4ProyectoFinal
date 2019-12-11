@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Adicion } from 'src/app/classes/adicion';
 import { DataService } from 'src/app/services/data.service';
+import { $ } from 'jquery';
 
 @Component({
   selector: 'app-adiciones',
@@ -21,7 +22,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
   okDel = false;
   notOkDel = false;
   response = {};
-  lista = [];
+  lista: any;
   listaMozos = [];
   listaPlatos = [];
   listaDetalles = [];
@@ -63,6 +64,17 @@ export class AdicionesComponent implements OnInit, OnDestroy {
       })
   }
 
+  // obtenerPlatoId() {
+  //   this.dataSrv.getPlatoId().subscribe((res: []) => {
+  //     console.log(res)
+  //     this.listaPlatos = res;
+  //     this.listaPlatos.unshift({ id: '0', desc: '' });
+  //   },
+  //     (error) => {
+  //       console.log(error)
+  //     })
+  // }
+
   generarAdicion() {
     this.dataSrv.postAdicion(this.adicion.fecha_fin, this.adicion.nro_mesa, this.adicion.id_mozo).subscribe((res) => {
       this.ok = true;
@@ -70,6 +82,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.ok = false;
       }, 2500);
+      this.refresh();
     },
       (error) => {
         this.notOk = true;
@@ -79,7 +92,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
         }, 2500);
       })
 
-    this.obtenerAdicion()
+    this.refresh();
   }
 
   obtenerAdicion() {
@@ -96,6 +109,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
   agregarDetalle(selectedItem: any) {
     this.dataSrv.postDetalle("0", "0", "0", selectedItem.id.toString()).subscribe((res: []) => {
       console.log(res)
+      this.refresh();
     },
       (error) => {
         console.log(error)
@@ -105,19 +119,22 @@ export class AdicionesComponent implements OnInit, OnDestroy {
   }
 
   editarDetalle(selectedItem: any) {
-    console.log('ESTO ES EL ID DE DETALLE', selectedItem)
-    console.log(this.selectedPlato)
-    var subtotal = (selectedItem.plato.precio_costo * (selectedItem.plato.porc_gan / 100) + selectedItem.plato.precio_costo)
-    var body = { id_plato: this.selectedPlato, cantidad: this.adicionEdit.cantidad, precio_unit: this.adicionEdit.precio_unit, subtotal: (this.adicionEdit.cantidad * subtotal) }
+    var a = $('#selectedValue')
+    console.log(a);
+
+    var subtotal = this.adicionEdit.cantidad * selectedItem.plato.precio_plato;
+    var body = { id_plato: this.selectedPlato, cantidad: this.adicionEdit.cantidad, precio_unit: this.adicionEdit.precio_unit, subtotal: subtotal }
     if (this.selectedPlato == -1) {
       body.id_plato = selectedItem.id_plato
     }
     if (this.adicionEdit.cantidad == -1) {
       body.cantidad = selectedItem.cantidad
     }
-    if (this.adicionEdit.precio_unit == -1) {
-      body.precio_unit = selectedItem.precio_unit
-    }
+    // if (this.adicionEdit.precio_unit == -1) {
+    //   body.precio_unit = selectedItem.precio_unit
+    // }
+
+    console.log(body.subtotal)
 
     this.dataSrv.putDetalle(selectedItem.id, body).subscribe((res) => {
       this.okEdit = true;
@@ -125,6 +142,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.okEdit = false;
       }, 2500);
+      this.refresh();
     },
       (error) => {
         this.notOkEdit = true;
@@ -136,6 +154,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
     )
 
     this.refresh();
+    
   }
 
   borrarDetalle(selectedItem: any) {
@@ -145,6 +164,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.okDel = false;
       }, 2500);
+      this.refresh();
     },
       (error) => {
         console.log(error)
@@ -184,6 +204,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.okEdit = false;
         }, 2500);
+        this.refresh();
       },
         (error) => {
           this.notOkEdit = true;
@@ -218,6 +239,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.okEdit = false;
       }, 2500);
+      this.refresh();
     },
       (error) => {
         this.notOkEdit = true;
@@ -231,24 +253,55 @@ export class AdicionesComponent implements OnInit, OnDestroy {
   }
 
   borrarAdicion(selectedItem: any) {
-    this.dataSrv.deleteAdicion(selectedItem.id).subscribe((res) => {
-      this.okDel = true;
-      this.response = res;
-      setTimeout(() => {
-        this.okDel = false;
-      }, 2500);
-    },
-      (error) => {
-        console.log(error)
-        this.notOkDel = true;
-        this.response = error.error;
-        setTimeout(() => {
-          this.notOkDel = false;
-        }, 2500);
-      }
-    )
+    let platos = [];
+    selectedItem.detalles.forEach(e => {
+      platos.push(e.plato)
+    });
 
-    this.refresh();
+    // console.log(platos)
+
+    if (confirm("Seguro que desea eliminar la Adición ¿?")) {
+
+      this.dataSrv.deleteAdicion(selectedItem.id).subscribe((res) => {
+        this.okDel = true;
+        this.response = res;
+        setTimeout(() => {
+          this.okDel = false;
+        }, 2500);
+        this.refresh();
+      },
+        (error) => {
+          console.log(error)
+          this.notOkDel = true;
+          this.response = error.error;
+          setTimeout(() => {
+            this.notOkDel = false;
+          }, 2500);
+        }
+      )
+
+      this.refresh();
+    } else {
+      return false;
+    }
+
+
+    // platos.forEach(e => {
+    //   this.dataSrv.postPlato(e.desc, e.precio_costo, e.porc_gan).subscribe((res) => {
+    //     this.ok = true;
+    //     this.response = res;
+    //     setTimeout(() => {
+    //       this.ok = false;
+    //     }, 2500);
+    //   },
+    //     (error) => {
+    //       this.notOk = true;
+    //       this.response = error.error;
+    //       setTimeout(() => {
+    //         this.notOk = false;
+    //       }, 2500);
+    //     })
+    // });
   }
 
   obtenerMozos() {

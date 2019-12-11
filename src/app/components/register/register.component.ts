@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
   notOk = false;
   response = {};
 
-  constructor(private dataSrv: DataService) { }
+  constructor(private dataSrv: DataService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -29,6 +29,7 @@ export class RegisterComponent implements OnInit {
       this.response = res;
       setTimeout(() => {
         this.ok = false;
+        this.router.navigate(['/login']);
       }, 2500);
     },
       (error) => {

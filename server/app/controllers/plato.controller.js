@@ -7,7 +7,8 @@ exports.registerPlato = (req, res) => {
     db.plato.create({
       desc: req.body.desc,
       precio_costo: req.body.precio_costo,
-      porc_gan: req.body.porc_gan
+      porc_gan: req.body.porc_gan,
+      precio_plato: (req.body.precio_costo * (req.body.porc_gan / 100) + req.body.precio_costo),
     }).then((plato) => {
       res.status(200).json({
         msg: 'Generado Correctamente !!!',
@@ -26,13 +27,23 @@ exports.registerPlato = (req, res) => {
 
 exports.listaPlato = (req, res) => {
   db.plato.findAll({
-    attributes: ['id', 'desc', 'precio_costo', 'porc_gan'],
+    attributes: ['id', 'desc', 'precio_costo', 'porc_gan', 'precio_plato'],
   }).then(result => {
     res.status(200).json(result);
   }).catch(err => {
     res.status(401).send(err)
   });
 };
+
+exports.listaPlatoId = (req, res) => {
+  db.plato.findByPk(req.params.id, {
+    attributes: ['id', 'desc', 'precio_costo', 'porc_gan', 'precio_plato'],
+  }).then(result => {
+    res.status(200).json(result);
+  }).catch(err => {
+    res.status(401).send(err)
+  });
+}
 
 exports.borrar = (req, res) => {
   if (req.params.id) {

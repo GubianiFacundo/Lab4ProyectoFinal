@@ -23,10 +23,10 @@ module.exports = function(sequelize, DataTypes) {
     id_mozo: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: 'mozo',
-        key: 'id'
-      }
+      // references: {
+      //   model: 'mozo',
+      //   key: 'id'
+      // }
     },
     estado: {
       type: DataTypes.STRING,
