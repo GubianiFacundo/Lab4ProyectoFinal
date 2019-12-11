@@ -44,7 +44,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.obtenerAdicion()
+    this.obtenerAdicion();
   }
 
   async refresh() {
@@ -54,13 +54,14 @@ export class AdicionesComponent implements OnInit, OnDestroy {
 
   obtenerPlato() {
     this.dataSrv.getPlato().subscribe((res: []) => {
-      console.log(res)
+      console.log(res);
       this.listaPlatos = res;
       this.listaPlatos.unshift({ id: '0', desc: '' });
     },
       (error) => {
-        console.log(error)
-      })
+        console.log(error);
+      }
+    );
   }
 
   // obtenerPlatoId() {
@@ -89,31 +90,33 @@ export class AdicionesComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.notOk = false;
         }, 2500);
-      })
+      }
+    );
 
     this.refresh();
   }
 
   obtenerAdicion() {
     this.dataSrv.getAdicion(this.fecha_ini, this.fecha_fin, this.selectedMozo).subscribe((res: []) => {
-      console.log(res)
+      console.log(res);
       this.lista = res;
-      console.log(this.lista)
+      console.log(this.lista);
     },
       (error) => {
-        console.log(error)
-      })
+        console.log(error);
+      }
+    );
   }
 
   agregarDetalle(selectedItem: any) {
-    this.dataSrv.postDetalle("0", "0", "0", selectedItem.id.toString()).subscribe((res: []) => {
-      console.log(res)
+    this.dataSrv.postDetalle('0', '0', '0', selectedItem.id.toString()).subscribe((res: []) => {
+      console.log(res);
       this.refresh();
     },
       (error) => {
-        console.log(error)
+        console.log(error);
       }
-    )
+    );
     this.refresh();
   }
 
@@ -121,16 +124,16 @@ export class AdicionesComponent implements OnInit, OnDestroy {
     var subtotal = this.adicionEdit.cantidad * selectedItem.plato.precio_plato;
     var body = { id_plato: this.selectedPlato, cantidad: this.adicionEdit.cantidad, precio_unit: this.adicionEdit.precio_unit, subtotal: subtotal }
     if (this.selectedPlato == -1) {
-      body.id_plato = selectedItem.id_plato
+      body.id_plato = selectedItem.id_plato;
     }
     if (this.adicionEdit.cantidad == -1) {
-      body.cantidad = selectedItem.cantidad
+      body.cantidad = selectedItem.cantidad;
     }
     // if (this.adicionEdit.precio_unit == -1) {
     //   body.precio_unit = selectedItem.precio_unit
     // }
 
-    console.log(body.subtotal)
+    console.log(body.subtotal);
 
     this.dataSrv.putDetalle(selectedItem.id, body).subscribe((res) => {
       this.okEdit = true;
@@ -163,7 +166,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
       this.refresh();
     },
       (error) => {
-        console.log(error)
+        console.log(error);
         this.notOkDel = true;
         this.response = error.error;
         setTimeout(() => {
@@ -177,18 +180,19 @@ export class AdicionesComponent implements OnInit, OnDestroy {
 
   obtenerDetalle(selectedItem: any) {
     this.dataSrv.getDetalle(selectedItem.id).subscribe((res: []) => {
-      console.log(res)
+      console.log(res);
       this.listaDetalles = res;
     },
       (error) => {
-        console.log(error)
-      })
+        console.log(error);
+      }
+    );
   }
 
   cerrarAdicion(selectedItem: any) {
     var total = 0;
     selectedItem.detalles.forEach(e => {
-      total += e.subtotal
+      total += e.subtotal;
     });
 
     var body = { estado: 'CERRADA', total: total }
@@ -220,13 +224,13 @@ export class AdicionesComponent implements OnInit, OnDestroy {
   editarAdicion(selectedItem: any) {
     var body = { nro_mesa: this.adicionEdit.nro_mesa, id_mozo: this.adicionEdit.id_mozo, fecha_fin: this.adicionEdit.fecha_fin }
     if (this.adicionEdit.nro_mesa == -1) {
-      body.nro_mesa = selectedItem.nro_mesa
+      body.nro_mesa = selectedItem.nro_mesa;
     }
     if (this.adicionEdit.id_mozo == -1) {
-      body.id_mozo = selectedItem.id_mozo
+      body.id_mozo = selectedItem.id_mozo;
     }
     if (this.adicionEdit.fecha_fin == new Date()) {
-      body.fecha_fin = selectedItem.fecha_fin
+      body.fecha_fin = selectedItem.fecha_fin;
     }
 
     this.dataSrv.putAdicion(selectedItem.id, body).subscribe((res) => {
@@ -251,7 +255,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
   borrarAdicion(selectedItem: any) {
     let platos = [];
     selectedItem.detalles.forEach(e => {
-      platos.push(e.plato)
+      platos.push(e.plato);
     });
 
     // console.log(platos)
@@ -274,7 +278,7 @@ export class AdicionesComponent implements OnInit, OnDestroy {
             this.notOkDel = false;
           }, 2500);
         }
-      )
+      );
 
       this.refresh();
     } else {
@@ -307,8 +311,9 @@ export class AdicionesComponent implements OnInit, OnDestroy {
       this.listaMozos.unshift({ id: '', nombre: '' });
     },
       (error) => {
-        console.log(error)
-      })
+        console.log(error);
+      }
+    );
   }
 
 }

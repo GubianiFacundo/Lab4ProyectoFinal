@@ -41,7 +41,11 @@ exports.listaAdicion = (req, res) => {
       },
       include: [{
         as: 'detalles',
-        model: db.detalle
+        model: db.detalle,
+        include: [{
+          as: 'plato',
+          model: db.plato,
+        }]
       }]
     }).then(result => {
       res.status(200).json(result);
